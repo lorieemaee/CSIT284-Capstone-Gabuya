@@ -39,4 +39,21 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('navigates to borrowing history and back', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const BookTrackerApp());
+
+    await tester.tap(find.byIcon(Icons.history));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Borrowing History'), findsOneWidget);
+    expect(find.text('No history yet.'), findsOneWidget);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Book Borrowing Tracker'), findsOneWidget);
+  });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/book.dart';
 import '../widgets/book_list_item.dart';
+import 'borrowing_history_screen.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key});
@@ -146,33 +147,10 @@ class _BookListScreenState extends State<BookListScreen> {
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (ctx) => Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Borrowing History',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: _history.isEmpty
-                            ? const Center(child: Text('No history yet.'))
-                            : ListView.builder(
-                                itemCount: _history.length,
-                                itemBuilder: (c, i) => ListTile(
-                                  leading: const Icon(Icons.book),
-                                  title: Text(_history[i]),
-                                ),
-                              ),
-                      ),
-                    ],
+              Navigator.of(context).push<void>(
+                MaterialPageRoute<void>(
+                  builder: (context) => BorrowingHistoryScreen(
+                    history: List<String>.unmodifiable(_history),
                   ),
                 ),
               );

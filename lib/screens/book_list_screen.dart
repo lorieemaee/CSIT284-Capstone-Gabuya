@@ -37,6 +37,37 @@ class _BookListScreenState extends State<BookListScreen> {
       author: 'Martin Kleppmann',
       isBorrowed: false,
     ),
+    Book(
+      id: '5',
+      title: 'The Hobbit',
+      author: 'J.R.R. Tolkien',
+      isBorrowed: false,
+    ),
+    Book(
+      id: '6',
+      title: 'To Kill a Mockingbird',
+      author: 'Harper Lee',
+      isBorrowed: false,
+    ),
+    Book(id: '7', title: '1984', author: 'George Orwell', isBorrowed: false),
+    Book(
+      id: '8',
+      title: 'The Great Gatsby',
+      author: 'F. Scott Fitzgerald',
+      isBorrowed: false,
+    ),
+    Book(
+      id: '9',
+      title: 'The Alchemist',
+      author: 'Paulo Coelho',
+      isBorrowed: false,
+    ),
+    Book(
+      id: '10',
+      title: 'The Lord of the Rings',
+      author: 'J.R.R. Tolkien',
+      isBorrowed: false,
+    ),
   ];
 
   String _searchQuery = '';

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../models/book.dart';
 import '../widgets/book_list_item.dart';
 import 'borrowing_history_screen.dart';
+import 'profile_screen.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key, this.httpClient});
@@ -550,6 +551,24 @@ class _BookListScreenState extends State<BookListScreen> {
         title: const Text('Book Borrowing Tracker'),
         actions: [
           IconButton(
+            tooltip: 'Profile',
+            icon: const Icon(Icons.account_circle_outlined),
+            onPressed: () {
+              Navigator.of(context).push<void>(
+                MaterialPageRoute<void>(
+                  builder: (context) => ProfileScreen(
+                    totalBooks: _books.length,
+                    borrowedBooks: _books
+                        .where((book) => book.isBorrowed)
+                        .length,
+                    statisticsAvailable: !_isLoading && _loadError == null,
+                  ),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            tooltip: 'Borrowing history',
             icon: const Icon(Icons.history),
             onPressed: _isLoading || _loadError != null
                 ? null

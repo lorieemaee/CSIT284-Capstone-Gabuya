@@ -110,7 +110,7 @@ void main() {
     final (client, _) = await _pumpApp(tester);
     addTearDown(client.close);
 
-    await tester.tap(find.byIcon(Icons.history));
+    await tester.tap(find.byTooltip('Borrowing history'));
     await tester.pumpAndSettle();
 
     expect(find.text('Borrowing History'), findsOneWidget);
@@ -120,6 +120,26 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Book Borrowing Tracker'), findsOneWidget);
+  });
+
+  testWidgets('opens the sample profile with live library statistics', (
+    WidgetTester tester,
+  ) async {
+    final (client, _) = await _pumpApp(tester);
+    addTearDown(client.close);
+
+    await tester.tap(find.byTooltip('Profile'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Profile'), findsOneWidget);
+    expect(find.text('Sample User'), findsNWidgets(2));
+    expect(find.text('sample.user@example.com'), findsOneWidget);
+    expect(find.text('Library Member'), findsOneWidget);
+    expect(find.text('Total'), findsOneWidget);
+    expect(find.text('Borrowed'), findsOneWidget);
+    expect(find.text('Available'), findsOneWidget);
+    expect(find.text('10'), findsNWidgets(2));
+    expect(find.text('0'), findsOneWidget);
   });
 
   testWidgets('shows the tenth sample book in the collection', (

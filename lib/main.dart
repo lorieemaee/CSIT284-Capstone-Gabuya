@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'screens/book_list_screen.dart';
 
 void main() {
@@ -6,7 +8,9 @@ void main() {
 }
 
 class BookTrackerApp extends StatelessWidget {
-  const BookTrackerApp({super.key});
+  const BookTrackerApp({super.key, this.httpClient});
+
+  final http.Client? httpClient;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,7 @@ class BookTrackerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
-      home: const BookListScreen(),
+      home: BookListScreen(httpClient: httpClient),
     );
   }
 }

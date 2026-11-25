@@ -112,7 +112,9 @@ class _BookListScreenState extends State<BookListScreen> {
 
   Future<List<Book>> _loadBooks() async {
     final data = await _requestJson('GET', _booksUri);
-    if (data == null || (data is Map && data.isEmpty)) {
+    if (data == null ||
+        (data is Map && data.isEmpty) ||
+        (data is List && data.every((value) => value == null))) {
       final books = _initialBooks();
       await _requestJson(
         'PUT',
@@ -124,14 +126,24 @@ class _BookListScreenState extends State<BookListScreen> {
       return books;
     }
 
-    if (data is! Map<String, dynamic>) {
-      throw const FormatException('The books path must contain a JSON object.');
+    if (data is Map<String, dynamic>) {
+      return [
+        for (final entry in data.entries)
+          Book.fromRealtimeDatabase(id: entry.key, value: entry.value),
+      ];
     }
 
-    return [
-      for (final entry in data.entries)
-        Book.fromRealtimeDatabase(id: entry.key, value: entry.value),
-    ];
+    if (data is List) {
+      return [
+        for (var index = 0; index < data.length; index++)
+          if (data[index] != null)
+            Book.fromRealtimeDatabase(id: index.toString(), value: data[index]),
+      ];
+    }
+
+    throw const FormatException(
+      'The books path must contain a JSON object or array.',
+    );
   }
 
   Future<List<String>> _loadHistory() async {
@@ -175,56 +187,61 @@ class _BookListScreenState extends State<BookListScreen> {
 
   List<Book> _initialBooks() => [
     Book(
-      id: '1',
+      id: 'sample-1',
       title: 'Flutter in Action',
       author: 'Eric Windmill',
       isBorrowed: false,
     ),
     Book(
-      id: '2',
+      id: 'sample-2',
       title: 'Clean Code',
       author: 'Robert C. Martin',
       isBorrowed: false,
     ),
     Book(
-      id: '3',
+      id: 'sample-3',
       title: 'Pragmatic Programmer',
       author: 'Andrew Hunt',
       isBorrowed: false,
     ),
     Book(
-      id: '4',
+      id: 'sample-4',
       title: 'Designing Data-Intensive Applications',
       author: 'Martin Kleppmann',
       isBorrowed: false,
     ),
     Book(
-      id: '5',
+      id: 'sample-5',
       title: 'The Hobbit',
       author: 'J.R.R. Tolkien',
       isBorrowed: false,
     ),
     Book(
-      id: '6',
+      id: 'sample-6',
       title: 'To Kill a Mockingbird',
       author: 'Harper Lee',
       isBorrowed: false,
     ),
-    Book(id: '7', title: '1984', author: 'George Orwell', isBorrowed: false),
     Book(
-      id: '8',
+      id: 'sample-7',
+      title: '1984',
+      author: 'George Orwell',
+      isBorrowed: false,
+    ),
+    Book(
+      id: 'sample-8',
       title: 'The Great Gatsby',
       author: 'F. Scott Fitzgerald',
       isBorrowed: false,
     ),
     Book(
-      id: '9',
+      id: 'sample-9',
       title: 'The Alchemist',
       author: 'Paulo Coelho',
       isBorrowed: false,
     ),
     Book(
-      id: '10',
+      id: 'sample-10',
       title: 'The Lord of the Rings',
       author: 'J.R.R. Tolkien',
       isBorrowed: false,

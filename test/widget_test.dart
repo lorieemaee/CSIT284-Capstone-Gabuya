@@ -183,6 +183,33 @@ void main() {
     );
   });
 
+  testWidgets('loads Firebase array data and skips empty slots', (
+    WidgetTester tester,
+  ) async {
+    final (client, requests) = await _pumpApp(
+      tester,
+      books: [
+        null,
+        {
+          'title': 'Array Book',
+          'author': 'Database Author',
+          'isBorrowed': false,
+          'dueDate': null,
+        },
+      ],
+    );
+    addTearDown(client.close);
+
+    expect(find.text('Array Book'), findsOneWidget);
+    expect(
+      requests.any(
+        (request) =>
+            request.method == 'PUT' && request.url.path == '/books.json',
+      ),
+      isFalse,
+    );
+  });
+
   testWidgets('persists borrowing status and history', (
     WidgetTester tester,
   ) async {
@@ -194,7 +221,8 @@ void main() {
 
     final updateRequest = requests.singleWhere(
       (request) =>
-          request.method == 'PATCH' && request.url.path == '/books/1.json',
+          request.method == 'PATCH' &&
+          request.url.path == '/books/sample-1.json',
     );
     final update = jsonDecode(updateRequest.body) as Map<String, dynamic>;
     expect(update['isBorrowed'], isTrue);
@@ -255,7 +283,8 @@ void main() {
 
     final updateRequest = requests.singleWhere(
       (request) =>
-          request.method == 'PATCH' && request.url.path == '/books/1.json',
+          request.method == 'PATCH' &&
+          request.url.path == '/books/sample-1.json',
     );
     final update = jsonDecode(updateRequest.body) as Map<String, dynamic>;
     expect(update['title'], 'Updated Title');
@@ -279,7 +308,8 @@ void main() {
     expect(
       requests.any(
         (request) =>
-            request.method == 'DELETE' && request.url.path == '/books/1.json',
+            request.method == 'DELETE' &&
+            request.url.path == '/books/sample-1.json',
       ),
       isTrue,
     );
